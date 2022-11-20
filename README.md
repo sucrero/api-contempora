@@ -1,24 +1,67 @@
-# Lumen PHP Framework
+# API Rest con Lumen
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/lumen)](https://packagist.org/packages/laravel/lumen-framework)
+Servicio web que hace uso de la API pública [Go REST](https://gorest.co.in/)
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## Instalación
+Instalar las dependencia de composer
 
-## Official Documentation
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+```bash
+composer install
+```
 
-## Contributing
+Copiar el archivo .env.example a .env
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Registrarse en [Go REST](https://gorest.co.in/) y obtener su "Access Tokens"
 
-## Security Vulnerabilities
+En el archivo .env creado anteriormente, se dede ingresar las variables de entorno respectivas:
+```PHP
+API_KEY = YOUR_API_KEY
+URL_API_USER = URL_API_GO_REST
+```
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+Estando en el proyecto clonado, podemos levantar el entorno con el siguiente comando:
+```bach
+php -S localhost:8000 -t public
+```
 
-## License
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Endpoints (Usamos Postman)
+1. [GET]
+   * /usuarios - Lista todos los usuarios
+   * /usuarios?nombre="" - Obtiene usuario por nombre
+   * /usuarios?email="" - Obtiene usuario por email
+   * /usuarios?activos=true/false - Obtiene los usuarios activos o inactivos
+
+2. [POST]
+   * /usuarios - Crear usuarios (Recibe como parámetro un json)
+```json
+{
+  "nombre": "",
+  "email": "",
+  "genero": female or male,
+  "activo": true or false
+}
+``` 
+
+3. [PUT]
+   * /usuarios{id} - Actualiza todos los datos de un usuario  (Recibe como parámetro el id del usuarios a actualizar y un json con todos los valores del registro modificados)
+```json
+{
+   "nombre": "",
+   "email": "",
+   "genero": female or male,
+   "activo": true or false
+}
+```
+
+4. [PATCH]
+   * /usuarios/{id} - Actualiza parcialmente los datos de un usuario (Recibe como parámetros el id del usuario a actualizar y un json con los datos que se quieran modificar)
+```json
+{
+   "nombre": "",
+   "email": "",
+   "genero": female or male,
+   "activo": true or false
+}
+```
