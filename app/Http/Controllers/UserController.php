@@ -131,6 +131,50 @@ class UserController extends Controller
         return response(json_decode($data), 201);
     }
 
+    public function createUser(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'nombre'    => 'required',
+            'email'     => 'required|email' ,
+            'genero'    => [
+                'required',
+                Rule::in(['female', 'male'])
+            ],
+            'activo' => [
+                'required',
+                Rule::in(['true', 'false']),
+            ],
+        ]);
+
+
+        $msj = array();
+        if( $validator->fails() ){
+            foreach ($validator->errors()->getMessages() as $item) {
+                array_push($msj, $item);
+            }
+            return response(json_encode($msj), 404);
+        }
+
+        $url = env('URL_API_USER').'/users';
+        $name = $request->input('nombre');
+        $email = $request->input('email');
+        $gender = $request->input('genero');
+        $status = ($request->input('activo') == 'true') ? 'active' : 'inactive';
+
+        $response = Http::withToken(env('API_KEY'))->post($url,[
+            'name'      => $name,
+            'email'     => $email,
+            'gender'    => $gender,
+            'status'    => $status
+        ]);
+
+        if( $response->failed() ){
+            return response(json_decode($response,true),$response->status());
+        }
+
+        return response(json_decode($response,true),201);
+    }
+
 }
 
 

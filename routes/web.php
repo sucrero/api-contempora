@@ -16,5 +16,7 @@
 $router->group(['prefix' => 'usuarios'], function () use ($router){
 
     $router->get('/', ['uses' => 'UserController@showUser']);
+    
+    $router->post('/', ['uses' => 'UserController@createUser']);
 
 });
