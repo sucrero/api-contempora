@@ -19,4 +19,6 @@ $router->group(['prefix' => 'usuarios'], function () use ($router){
     
     $router->post('/', ['uses' => 'UserController@createUser']);
 
+    $router->put('/{id}', ['uses' => 'UserController@updateUser']);
+
 });
