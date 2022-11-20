@@ -49,6 +49,21 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+
+        if( $exception instanceof ModelNotFoundException ){
+            return response()->json([
+                "res"   => false,
+                "error" => "Error de modelo"
+            ],400);
+        }
+
+        if( $exception instanceof HttpException ){
+            return response()->json([
+                "res"       => false,
+                "message"   => "Error: Ruta no encontrada"
+            ], 404);
+        }
+        
         return parent::render($request, $exception);
     }
 }

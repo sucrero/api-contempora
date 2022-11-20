@@ -13,6 +13,8 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->group(['prefix' => 'usuarios'], function () use ($router){
+
+    $router->get('/', ['uses' => 'UserController@showUser']);
+
 });
