@@ -45,7 +45,22 @@ class UserController extends Controller
                     $nombre = $request->input('nombre');
                     $response = $this->showUserByName($nombre);
 
-                    break;                
+                    break;
+                case 'email':
+                    
+                    $validator = Validator::make($request->all(), [
+                        'email' => 'required|email',
+                    ]);
+
+                    if( $validator->fails() ){
+                        $errors = $validator->errors();
+                        return response($errors->first('email'), 404);
+                    }
+                    $email = $request->input('email');
+                    $response = $this->showUserByEmail($email);
+
+                    break;
+                
                 default:
                     return response("Error: Parámetro no válido", 404);
                     break;
@@ -68,6 +83,12 @@ class UserController extends Controller
         $url = env('URL_API_USER').'/users?name='.$name;
         $data = Http::withToken(env('API_KEY'))->get($url);
         return response(json_decode($data, true), 201);
+    }
+
+    public function showUserByEmail($email){
+        $url = env('URL_API_USER').'/users?email='.$email;
+        $data = Http::withToken(env('API_KEY'))->get($url);
+        return response(json_decode($data), 201);
     }
 
 }
