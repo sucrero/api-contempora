@@ -21,4 +21,6 @@ $router->group(['prefix' => 'usuarios'], function () use ($router){
 
     $router->put('/{id}', ['uses' => 'UserController@updateUser']);
 
+    $router->patch('/{id}', ['uses' => 'UserController@updatePartialUser']);
+
 });

@@ -218,6 +218,74 @@ class UserController extends Controller
         return response(json_decode($response,true),200);
     }
 
+    public function updatePartialUser($id, Request $request){
+
+        $data = $request->all();
+
+        $dataSend = array();
+        foreach ($data as $key => $value) {
+
+            switch ($key) {
+                case 'nombre':
+
+                    $validator = Validator::make($request->all(), [
+                        'nombre' => 'required',
+                    ]);
+                    $key = 'name';
+                    break;
+                case 'email':
+
+                    $validator = Validator::make($request->all(), [
+                        'email' => 'required|email',
+                    ]);
+
+                    break;
+                case 'genero':
+
+                    $validator = Validator::make($request->all(), [
+                        'required',
+                        Rule::in(['female', 'male'])
+                    ]);
+                    $key = 'gender';
+                    break;
+                case 'activo':
+
+                    $validator = Validator::make($request->all(), [
+                        'activo' => [
+                            'required',
+                            Rule::in(['true', 'false']),
+                        ],
+                    ]);
+                    $key = 'status';
+                    break;
+
+                default:
+                    return response("Error: json inválido", 404);
+                    break;
+            }
+
+            if( $validator->fails() ){
+                $errors = $validator->errors();
+                return response($errors->first($key), 404);
+            }else{
+                $dataSend[$key] = $value;
+            }
+
+
+        }
+        
+        $url = env('URL_API_USER').'/users/'.$id;
+
+        $response = Http::withToken(env('API_KEY'))->patch($url,$dataSend);
+
+        if( $response->failed() ){
+            
+            return response(json_decode($response,true),$response->status());
+        }
+
+        return response(json_decode($response,true), 200);
+    }
+
 }
 
 
